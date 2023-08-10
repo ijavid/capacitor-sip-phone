@@ -16,8 +16,6 @@ Pod::Spec.new do |s|
   s.dependency 'Capacitor'
 
   s.dependency 'linphone-sdk'
-  s.dependency 'linphone-sdk/basic-frameworks'
-  s.dependency 'linphone-sdk/app-extension-swift'
 
   s.swift_version = '5.1'
 end

@@ -53,18 +53,24 @@ class SipPhoneControl: ObservableObject {
         // It doesn't mean calls will be made with video automatically,
         // But it allows to use it later
         mCore.videoCaptureEnabled = false
-        mCore.videoDisplayEnabled = false
+        mCore.videoDisplayEnabled = true
         
         // When enabling the video, the remote will either automatically answer the update request
         // or it will ask it's user depending on it's policy.
         // Here we have configured the policy to always automatically accept video requests
-        // mCore.videoActivationPolicy!.automaticallyAccept = true
-        
+        mCore.videoActivationPolicy!.automaticallyAccept = true
         
         // If the following property is enabled, it will automatically configure created call params with video enabled
-        //core.videoActivationPolicy.automaticallyInitiate = true
+        mCore.videoActivationPolicy!.automaticallyInitiate = true
+
+        // ???
+        // mCore.videoEnabled = true;
+        
+        NSLog("[sip]: init before start")
         
         try? mCore.start()
+        
+        NSLog("[sip]: after before start")
         
         mCoreDelegate = CoreDelegateStub( onCallStateChanged: { (core: Core, call: Call, state: Call.State, message: String) in
             // This function will be called each time a call state changes,
@@ -80,6 +86,7 @@ class SipPhoneControl: ObservableObject {
                 self.isCallIncoming = true
                 
                 self.incomingCallName = call.remoteAddress?.displayName ?? "Unknown"
+//                self.remoteAddress = call.remoteAddress!.asStringUriOnly()
                 
                 self.mProviderDelegate.incomingCall()
             } else if (state == .IncomingReceived) {
@@ -137,7 +144,7 @@ class SipPhoneControl: ObservableObject {
                     self.mProviderDelegate.stopCall()
                 }
                 
-                self.remoteAddress = "Nobody yet"
+                self.remoteAddress = ""
                 
                 self.isCallRunning = false
                 self.isCallOutgoing = false
@@ -149,6 +156,9 @@ class SipPhoneControl: ObservableObject {
                 callback()
             }
         }, onAccountRegistrationStateChanged: { (core: Core, account: Account, state: RegistrationState, message: String) in
+            NSLog("New registration state is \(state) for user id \( String(describing: account.params?.identityAddress?.asString()))\n")
+                
+            
             if (state == .Ok) {
                 self.loggedIn = true
             } else if (state == .Cleared) {
@@ -174,6 +184,10 @@ class SipPhoneControl: ObservableObject {
             else if (transportType == "TCP") { transport = TransportType.Tcp }
             else  { transport = TransportType.Udp }
             
+            transport = TransportType.Tcp
+            
+            NSLog("[SIP] transport \(transport)")
+            
             let authInfo = try Factory.Instance.createAuthInfo(username: username, userid: "", passwd: passwd, ha1: "", realm: "", domain: domain)
             let accountParams = try mCore.createAccountParams()
             let identity = try Factory.Instance.createAddress(addr: String("sip:" + username + "@" + domain))
@@ -185,9 +199,10 @@ class SipPhoneControl: ObservableObject {
             
             // Enable push notifications on this account
             accountParams.pushNotificationAllowed = true
+            accountParams.remotePushNotificationAllowed = true;
             
             // We're in a sandbox application, so we must set the provider to "apns.dev" since it will be "apns" by default, which is used only for production apps
-            accountParams.pushNotificationConfig?.provider = "apns.dev"
+//            accountParams.pushNotificationConfig?.provider = "apns.dev"
             
             mAccount = try mCore.createAccount(params: accountParams)
             mCore.addAuthInfo(info: authInfo)
@@ -217,6 +232,7 @@ class SipPhoneControl: ObservableObject {
             mCore.clearAllAuthInfo()
         }
     }
+    
     
     func outgoingCall() throws {
         do {
@@ -256,5 +272,12 @@ class SipPhoneControl: ObservableObject {
                 }
             } catch { NSLog(error.localizedDescription) }
         }
+    }
+    
+    func registerRemotePush(deviceToken: Data) {
+        var stringifiedToken = deviceToken.map{String(format: "%02X", $0)}.joined()
+        stringifiedToken.append(String(":remote"))
+        mCore.didRegisterForRemotePushWithStringifiedToken(deviceTokenStr: stringifiedToken)
+        NSLog("[SipPhoneControl] push-token \(stringifiedToken)")
     }
 }

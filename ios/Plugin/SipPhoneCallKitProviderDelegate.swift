@@ -20,6 +20,7 @@ class SipPhoneCallKitProviderDelegate : NSObject
         let providerConfiguration = CXProviderConfiguration(localizedName: Bundle.main.infoDictionary!["CFBundleDisplayName"] as! String)
         providerConfiguration.supportsVideo = true
         providerConfiguration.supportedHandleTypes = [.generic]
+        // providerConfiguration.includesCallsInRecents =
         
         providerConfiguration.maximumCallsPerCallGroup = 1
         providerConfiguration.maximumCallGroups = 1
@@ -40,6 +41,7 @@ class SipPhoneCallKitProviderDelegate : NSObject
         
         provider.reportNewIncomingCall(with: activeCallUUID, update: update, completion: { error in }) // Report to CallKit a call is incoming
     }
+
     
     func outgoingCallStarted()
     {
@@ -94,6 +96,7 @@ class SipPhoneCallKitProviderDelegate : NSObject
 extension SipPhoneCallKitProviderDelegate: CXProviderDelegate {
     
     func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
+        NSLog("[sip]: CXProviderDelegate CXEndCallAction")
         do {
             if (sipPhoneCtx.mCall?.state != .End && sipPhoneCtx.mCall?.state != .Released)  {
                 try sipPhoneCtx.mCall?.terminate()
@@ -112,18 +115,22 @@ extension SipPhoneCallKitProviderDelegate: CXProviderDelegate {
     }
     
     func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
+        NSLog("[sip]: CXProviderDelegate CXAnswerCallAction")
         do {
             sipPhoneCtx.mCore.configureAudioSession()
             
             try sipPhoneCtx.mCall?.accept()
             sipPhoneCtx.isCallRunning = true
         } catch {
+            NSLog("[sip]: CXAnswerCallAction error")
+            NSLog(error.localizedDescription)
             print(error)
         }
         action.fulfill()
     }
     
     func provider(_ provider: CXProvider, perform action: CXSetHeldCallAction) {
+        NSLog("[sip]: CXProviderDelegate CXSetHeldCallAction")
         action.fulfill()
     }
     func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
@@ -144,7 +151,7 @@ extension SipPhoneCallKitProviderDelegate: CXProviderDelegate {
         action.fulfill()
     }
     func providerDidReset(_ provider: CXProvider) {
-        NSLog("[sip]: providerDidReset")
+        NSLog("[sip]: CXProviderDelegate providerDidReset")
     }
     
     func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {

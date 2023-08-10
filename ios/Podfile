@@ -9,9 +9,9 @@ def capacitor_pods
   pod 'Capacitor', :path => '../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../node_modules/@capacitor/ios'
 
-  pod 'linphone-sdk', '5.2.0-alpha.156+e3f28405'
-  pod 'linphone-sdk/basic-frameworks', '~> 5.2.0-alpha.156+e3f28405'
-  pod 'linphone-sdk/app-extension-swift', '~> 5.2.0-alpha.156+e3f28405'
+  pod 'linphone-sdk', '5.2.45'
+  #pod 'linphone-sdk/basic-frameworks', '~> 5.2.45'
+  #pod 'linphone-sdk/app-extension-swift', '~> 5.2.45'
 end
 
 target 'Plugin' do
@@ -21,3 +21,5 @@ end
 target 'PluginTests' do
   capacitor_pods
 end
+
+

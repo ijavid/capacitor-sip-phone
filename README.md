@@ -13,6 +13,8 @@ npx cap sync
 
 <docgen-index>
 
+* [`addListener(SipEvent.AccountStateChanged, ...)`](#addlistenersipeventaccountstatechanged)
+* [`addListener(SipEvent.CallStateChanged, ...)`](#addlistenersipeventcallstatechanged)
 * [`initialize()`](#initialize)
 * [`login(...)`](#login)
 * [`logout()`](#logout)
@@ -20,11 +22,44 @@ npx cap sync
 * [`acceptCall()`](#acceptcall)
 * [`hangUp()`](#hangup)
 * [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### addListener(SipEvent.AccountStateChanged, ...)
+
+```typescript
+addListener(eventName: SipEvent.AccountStateChanged, listenerFunc: (data: { isLoggedIn: boolean; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code><a href="#sipevent">SipEvent.AccountStateChanged</a></code> |
+| **`listenerFunc`** | <code>(data: { isLoggedIn: boolean; }) =&gt; void</code>          |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener(SipEvent.CallStateChanged, ...)
+
+```typescript
+addListener(eventName: SipEvent.CallStateChanged, listenerFunc: (data: { isCallRunning: boolean; isCallIncoming: boolean; isCallOutgoing: boolean; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code><a href="#sipevent">SipEvent.CallStateChanged</a></code>                                                |
+| **`listenerFunc`** | <code>(data: { isCallRunning: boolean; isCallIncoming: boolean; isCallOutgoing: boolean; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
 
 ### initialize()
 
@@ -103,6 +138,13 @@ Terminate current call
 ### Interfaces
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
 #### SipLoginOptions
 
 | Prop            | Type                                 | Description                      |
@@ -118,5 +160,16 @@ Terminate current call
 | Prop          | Type                |
 | ------------- | ------------------- |
 | **`address`** | <code>string</code> |
+
+
+### Enums
+
+
+#### SipEvent
+
+| Members                   | Value                                 |
+| ------------------------- | ------------------------------------- |
+| **`AccountStateChanged`** | <code>'SIPAccountStateChanged'</code> |
+| **`CallStateChanged`**    | <code>'SIPCallStateChanged'</code>    |
 
 </docgen-api>
