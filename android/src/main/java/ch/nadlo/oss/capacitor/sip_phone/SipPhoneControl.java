@@ -25,6 +25,7 @@ public class SipPhoneControl {
     private final ArraySet<SipPhoneEventListener> listeners = new ArraySet<>();
 
     public boolean isLoggedIn = false;
+    public String loginMessage = "";
     public boolean isCallRunning = false;
     public boolean isCallIncoming = false;
     public boolean isCallOutgoing = false;
@@ -33,6 +34,7 @@ public class SipPhoneControl {
         public void onAccountRegistrationStateChanged(@NonNull Core core, @NonNull Account account, RegistrationState state, @NonNull String message) {
             Log.i(TAG, "onAccountRegistrationStateChanged: state=" + state.toString() + " (" + message + ")");
             isLoggedIn = state == RegistrationState.Ok;
+            loginMessage = state + " (" + message + ")";
 
             // DEBUG
             Log.v(TAG, "onAccountRegistrationStateChanged: isPushNotificationAvailable " + core.isPushNotificationAvailable());

@@ -41,7 +41,7 @@ public class SipPhoneControlPlugin extends Plugin implements SipPhoneEventListen
     private static final String TAG = "SipPhoneControlPlugin";
 
     protected SipPhoneControl implementation = null;
-    private CordovaCall cordovaCall = new CordovaCall();
+//    private CordovaCall cordovaCall = new CordovaCall();
 
     public static HashMap<String, String> getSettings(Context context) {
         HashMap<String, String> config = new HashMap<>();
@@ -80,8 +80,9 @@ public class SipPhoneControlPlugin extends Plugin implements SipPhoneEventListen
 //            }
 //            startIncomingCall(remote.uri);
 //            displayIncomingCall(remote.uri, remote.uri, remote.uri, false, null);
-            cordovaCall.from = remote.uri;
-            cordovaCall.receiveCall();
+//            cordovaCall.from = remote.uri;
+//            cordovaCall.receiveCall();
+            // TODO do nothing for now
         }
 
         if (implementation.isCallRunning) {
@@ -140,7 +141,7 @@ public class SipPhoneControlPlugin extends Plugin implements SipPhoneEventListen
 
         SipPhoneControlPlugin.instance = this;
 
-        cordovaCall.initialize(this);
+//        cordovaCall.initialize(this);
 //        cordovaCall.checkCallPermission();
 //        cordovaCall.from = "TEST";
 //        cordovaCall.receiveCall();
@@ -159,7 +160,7 @@ public class SipPhoneControlPlugin extends Plugin implements SipPhoneEventListen
     @PermissionCallback
     public void initializeDone(PluginCall call) {
 
-        cordovaCall.checkCallPermission();
+//        cordovaCall.checkCallPermission();
 
         Log.v(TAG, "initializeDone");
 //        JSObject ret = new JSObject();
@@ -170,7 +171,7 @@ public class SipPhoneControlPlugin extends Plugin implements SipPhoneEventListen
     @PluginMethod
     public void checkCallPermission(PluginCall call) {
         Log.v(TAG, "checkCallPermission");
-        cordovaCall.checkCallPermission();
+//        cordovaCall.checkCallPermission();
         call.resolve();
     }
 

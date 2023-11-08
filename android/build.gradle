@@ -9,12 +9,13 @@ ext {
 buildscript {
     repositories {
         google()
+        jcenter()
         maven {
             url "https://linphone.org/maven_repository"
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.0.0'
 //        classpath 'com.google.gms:google-services:4.3.4' // TODO review FCM
     }
 }
@@ -49,6 +50,7 @@ android {
 repositories {
     google()
     mavenCentral()
+    jcenter()
     // We need to declare this repository to be able to use Liblinphone SDK
     maven {
         url "https://linphone.org/maven_repository"
