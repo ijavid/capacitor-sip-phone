@@ -13,6 +13,9 @@ export {
   SipEvent,
   SipLoginOptions,
   SipOutgoingCallOptions,
+  CallStateChangedData,
+  AccountStateChangedData,
+  SipPhoneControlPlugin
 } from './definitions';
 
 export { SipPhoneControl };

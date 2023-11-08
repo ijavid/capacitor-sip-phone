@@ -1,4 +1,4 @@
-import type {Plugin, PluginListenerHandle} from '@capacitor/core';
+import type { PluginListenerHandle} from '@capacitor/core';
 
 export interface SipLoginOptions {
     /**
@@ -31,11 +31,15 @@ export enum SipEvent {
 }
 
 export type AccountStateChangedData = {
-    isLoggedIn: boolean;
+    isLoggedIn: boolean; "username": string; "voipToken": string; "remoteToken": string;
 }
 
 export type CallStateChangedData = {
-    isCallRunning: boolean; isCallIncoming: boolean; isCallOutgoing: boolean; remoteAddress: string; incomingCallName: string;
+    isCallRunning: boolean;
+    isCallIncoming: boolean;
+    isCallOutgoing: boolean;
+    remoteAddress: string;
+    incomingCallName: string;
 }
 
 export interface SipPhoneControlPlugin {
@@ -78,7 +82,9 @@ export interface SipPhoneControlPlugin {
      * @param listenerFunc
      */
     addListener(eventName: string, listenerFunc: (data: any) => void): Promise<PluginListenerHandle>;
+
     addListener(eventName: SipEvent.AccountStateChanged, listenerFunc: (data: AccountStateChangedData) => void): Promise<PluginListenerHandle>;
+
     addListener(eventName: SipEvent.CallStateChanged, listenerFunc: (data: CallStateChangedData) => void): Promise<PluginListenerHandle>;
 
     /**

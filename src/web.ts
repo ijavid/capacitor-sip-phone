@@ -32,4 +32,5 @@ export class SipPhoneControlWeb
   hangUp(): Promise<void> {
     return Promise.reject('Not implemented on Web platform');
   }
+
 }
