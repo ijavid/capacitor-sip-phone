@@ -19,14 +19,18 @@ public class SipPhoneControlPlugin: CAPPlugin {
 
     override public func load() {
         let registerStateChangedListener = { [self] in
-            NSLog("[SIP] Value of the isLoggedIn \(self.implementation.loggedIn)")
+            NSLog("[SipPhoneControlPlugin] AccountStateChanged isLoggedIn=\(self.implementation.loggedIn)")
 
             self.notifyListeners(SipEvent.AccountStateChanged.rawValue, data: [
-                "isLoggedIn": self.implementation.loggedIn
+                "isLoggedIn": self.implementation.loggedIn,
+                "username": self.implementation.currentAccount,
+                "voipToken": self.implementation.tokenVOIP,
+                "remoteToken": self.implementation.tokenPUSH,
             ])
         }
 
         let callStateChangedListener = { [self] in
+            NSLog("[SipPhoneControlPlugin] CallStateChanged")
             self.notifyListeners(SipEvent.CallStateChanged.rawValue, data: [
                 "isCallRunning": self.implementation.isCallRunning,
                 "isCallIncoming": self.implementation.isCallIncoming,
@@ -93,11 +97,15 @@ public class SipPhoneControlPlugin: CAPPlugin {
     }
 
     @objc func initialize(_ call: CAPPluginCall) {
-      do {
-            call.resolve()
-        } catch {
-            call.reject(error.localizedDescription)
+        if let cb = implementation.registrationStateListener {
+            cb()
         }
+        call.resolve()
+//        do {
+//            call.resolve()
+//        } catch {
+//            call.reject(error.localizedDescription)
+//        }
     }
 
     @objc func login(_ call: CAPPluginCall) {
@@ -125,7 +133,6 @@ public class SipPhoneControlPlugin: CAPPlugin {
 
         do {
             try implementation.login()
-
             call.resolve()
         } catch {
             call.reject(error.localizedDescription)
