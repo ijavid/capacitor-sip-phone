@@ -1,4 +1,7 @@
-# @nadlowebagentur/capacitor-sip-phone
+
+Forked from  @nadlowebagentur/capacitor-sip-phone
+
+Updated to latest linphone sdk + added full android support
 
 Connect to SIP phone line
 
